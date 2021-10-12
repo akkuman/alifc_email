@@ -1,0 +1,21 @@
+ROSTemplateFormatVersion: '2015-09-01'
+Transform: 'Aliyun::Serverless-2018-04-03'
+Resources:
+  emailsrv:
+    Type: 'Aliyun::Serverless::Service'
+    Properties:
+      Description: '根据所给的信息发送邮件'
+    sendmail:
+      Type: 'Aliyun::Serverless::Function'
+      Properties:
+        Handler: index.handler
+        CodeUri: 'send_email/'
+        Description: 'send email'
+        Runtime: python3
+        Timeout: 120
+      Events:
+        http-test:
+          Type: HTTP
+          Properties:
+            AuthType: ANONYMOUS
+            Methods: ['POST']
