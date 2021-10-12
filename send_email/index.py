@@ -113,6 +113,12 @@ def new_response(start_response, code, msg, data):
     return [json.dumps(body).encode()]
 
 
+def quit_smtp_client(client):
+    try:
+        client.quit()
+    except:
+        pass
+
 def sendmail(host, username, password, mail_to, subject, relay_to, relay_name, mail_body, files):
     '''发送邮件
     Args:
@@ -130,6 +136,7 @@ def sendmail(host, username, password, mail_to, subject, relay_to, relay_name, m
             client = SMTPClient.get_logined_client(host, username, password)
             client.send_mail(mail_to, subject, relay_to, relay_name, mail_body, files)
             err = None
+            quit_smtp_client(client)
             break
         except smtplib.SMTPException as e:
             logger.exception('smtp错误')
