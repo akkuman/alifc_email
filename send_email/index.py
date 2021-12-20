@@ -10,6 +10,7 @@ from email.mime.text import MIMEText
 from email.utils import formatdate, make_msgid
 import time
 import base64
+import ssl
 
 logger: logging.Logger = logging.getLogger()
 
@@ -38,7 +39,8 @@ class SMTPClient(SMTPBase):
         super().__init__(host)
         self.host = host
         try:
-            self.client = smtplib.SMTP_SSL(host=host, timeout=timeout)
+            context = ssl._create_unverified_context()
+            self.client = smtplib.SMTP_SSL(host=host, timeout=timeout, context=context)
         except Exception:
             self.client = smtplib.SMTP(host=host, timeout=timeout)
         n, byte = self.client.connect(host)
